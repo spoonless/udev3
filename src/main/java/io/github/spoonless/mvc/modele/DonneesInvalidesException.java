@@ -1,4 +1,4 @@
-package io.github.spoonless.mvc;
+package io.github.spoonless.mvc.modele;
 
 public class DonneesInvalidesException extends Exception {
 	

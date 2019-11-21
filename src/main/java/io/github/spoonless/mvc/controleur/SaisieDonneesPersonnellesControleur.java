@@ -1,4 +1,4 @@
-package io.github.spoonless.mvc;
+package io.github.spoonless.mvc.controleur;
 
 import java.io.IOException;
 
@@ -7,6 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import io.github.spoonless.mvc.modele.Civilite;
+import io.github.spoonless.mvc.modele.DonneesInvalidesException;
+import io.github.spoonless.mvc.modele.DonneesPersonnelles;
 
 @WebServlet("/donneespersonnelles")
 public class SaisieDonneesPersonnellesControleur extends HttpServlet {
