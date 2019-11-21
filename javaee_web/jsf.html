@@ -36,7 +36,9 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom_rtd_theme.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Recherche" href="../search.html" /> 
+    <link rel="search" title="Recherche" href="../search.html" />
+    <link rel="next" title="Le protocole HTTP" href="../http/http.html" />
+    <link rel="prev" title="Sécurisation d’une application Web" href="securite.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -78,7 +80,7 @@
             
             
               <p class="caption"><span class="caption-text">Java EE pour le Web</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="environnement_developpement.html">L’environnement de développement</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="environnement_developpement.html#telechargement-des-outils">Téléchargement des outils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="environnement_developpement.html#installation-des-outils">Installation des outils</a></li>
@@ -190,6 +192,19 @@
 <li class="toctree-l2"><a class="reference internal" href="securite.html#configuration-https-dans-tomcat">Configuration https dans Tomcat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="securite.html#exercice">Exercice</a></li>
 <li class="toctree-l2"><a class="reference internal" href="securite.html#login-a-partir-d-un-formulaire-web">Login à partir d’un formulaire Web</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Java Server Faces (JSF)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creer-un-projet-avec-jsf">Créer un projet avec JSF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#la-vue-facelets">La vue : facelets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#activer-le-support-de-jsf-dans-eclipse">Activer le support de JSF dans Eclipse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#managed-beans">Managed beans</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#le-modele">Le modèle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#le-controleur">Le contrôleur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#la-navigation">La navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#la-validation-de-formulaire">La validation de formulaire</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#les-requetes-ajax">Les requêtes Ajax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pour-aller-plus-loin">Pour aller plus loin</a></li>
 </ul>
 </li>
 </ul>
@@ -345,6 +360,15 @@
   </ul>
 
   
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="../http/http.html" class="btn btn-neutral float-right" title="Le protocole HTTP" accesskey="n">Suivant <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="securite.html" class="btn btn-neutral" title="Sécurisation d’une application Web" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Précédent</a>
+      
+  </div>
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -357,34 +381,47 @@ framework permettant de créer des applications Web complètes.</p>
 <p>Il existe de nombreux frameworks permettant de développer des
 applications Web en Java : JSF, Struts2, Spring MVC, Wicket, GWT, Play,
 Tapestry… Lorsqu’on développe une application Web en Java, il peut
-être difficile de savoir lequel choisir. Pour ce cours, nous nous
+être difficile de savoir lequel choisir. Pour ce support, nous nous
 contenterons d’une introduction à JSF qui a la particularité d’être le
-framework officiellement supporté pour Java EE et donc d’être intégré
-dans le serveur d’application Wildfly.</p>
+framework officiellement supporté pour Java EE.</p>
 <div class="section" id="creer-un-projet-avec-jsf">
 <h2>Créer un projet avec JSF<a class="headerlink" href="#creer-un-projet-avec-jsf" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="admonition caution">
 <p class="admonition-title">Prudence</p>
 <p>Pour ce chapitre, nous allons voir l’utilisation de JSF
-2.2 dans un serveur d’application. La plupart des articles sur JSF
-disponibles sur le Web traitent soit de JSF 1.X soit de l’utilisation de
-JSF dans un conteneur de servlets (le plus souvent Tomcat). Même si les
+2.2. La plupart des articles sur JSF
+disponibles sur le Web traitent soit de JSF 1.X. Même si les
 notions restent les mêmes, la plupart des codes d’exemple que vous
 pourrez trouver <strong>ne fonctionneront pas</strong> sans adaptation.</p>
 </div>
-<p>L’implémentation de JSF intégrée dans Wildfly est l’implémentation de référence
-nommée <em>Mojarra</em>. <em>Mojarra</em> fournit une Servlet qu’il faut déclarer dans le
+<p>Nous devons ajouter une implémentation de JSF dans notre projet. Nous utiliserons
+l’implémentation officielle fournie par Oracle que nous pouvons ajouter comme
+dépendance dans le fichier <code class="file docutils literal notranslate"><span class="pre">pom.xml</span></code> de notre projet Maven :</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>com.sun.faces<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>jsf-impl<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>2.2.20<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+<span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>com.sun.faces<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>jsf-api<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>2.2.20<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+</div>
+<p>Cette implémentation fournit une Servlet qu’il faut déclarer dans le
 fichier <code class="file docutils literal notranslate"><span class="pre">web.xml</span></code> de son application :</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Déclaration de la servlet JSF dans le web.xml</span><a class="headerlink" href="#id1" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;servlet&gt;</span>
-  <span class="nt">&lt;servlet-name&gt;</span>Faces Servlet<span class="nt">&lt;/servlet-name&gt;</span>
+  <span class="nt">&lt;servlet-name&gt;</span>faces-servlet<span class="nt">&lt;/servlet-name&gt;</span>
   <span class="nt">&lt;servlet-class&gt;</span>javax.faces.webapp.FacesServlet<span class="nt">&lt;/servlet-class&gt;</span>
   <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
 <span class="nt">&lt;/servlet&gt;</span>
-<span class="c">&lt;!--La servlet de JSF est configurée pour répondre à toutes les requêtes de fichiers XHTML--&gt;</span>
+
 <span class="nt">&lt;servlet-mapping&gt;</span>
-  <span class="nt">&lt;servlet-name&gt;</span>Faces Servlet<span class="nt">&lt;/servlet-name&gt;</span>
+  <span class="nt">&lt;servlet-name&gt;</span>faces-servlet<span class="nt">&lt;/servlet-name&gt;</span>
   <span class="nt">&lt;url-pattern&gt;</span>*.xhtml<span class="nt">&lt;/url-pattern&gt;</span>
 <span class="nt">&lt;/servlet-mapping&gt;</span>
 </pre></div>
@@ -425,25 +462,6 @@ fichier est :</p>
 JSF en utilisant uniquement les annotations Java. Il est tout de même
 recommandé d’ajouter ce fichier dans l’application même si son contenu
 doit rester minimal.</p>
-<p>Pour l’utilisation de JSF en vue d’un déploiement dans Wildfly, nous
-allons également avoir besoin d’un service Java EE : <strong>CDI</strong> (Contexts
-and Dependency Injection). Nous reviendrons plus tard sur l’utilité de
-ce service. CDI n’est pas activé par défaut pour une application Web.
-Pour l’activer, il suffit d’ajouter le fichier de déploiement de CDI
-pour l’application. Ce fichier doit s’appeler <code class="file docutils literal notranslate"><span class="pre">beans.xml</span></code> et être
-situé dans le répertoire <code class="file docutils literal notranslate"><span class="pre">WEB-INF</span></code>. Le contenu minimal de ce fichier est :</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Le fichier de déploiement beans.xml</span><a class="headerlink" href="#id4" title="Lien permanent vers ce code">¶</a></div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="nt">&lt;beans</span>
-  <span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>
-  <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-  <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee</span>
-<span class="s">                      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd&quot;</span><span class="nt">&gt;</span>
-<span class="nt">&lt;/beans&gt;</span>
-</pre></div>
-</div>
-</div>
 </div>
 <div class="section" id="la-vue-facelets">
 <h2>La vue : facelets<a class="headerlink" href="#la-vue-facelets" title="Lien permanent vers ce titre">¶</a></h2>
@@ -457,8 +475,8 @@ facelet n’est pas transformée en Servlet.</p>
 XHTML-1.0-Transitional. Avec le succès de HTML5, des adaptations ont été
 faites dans JSF (Java EE 7) pour permettre de développer des facelets
 HTML5. Néanmoins, une facelet doit être un document XML bien formé.</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">Un exemple de fichier XHTML</span><a class="headerlink" href="#id5" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Un exemple de fichier XHTML</span><a class="headerlink" href="#id4" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -584,8 +602,8 @@ Ces balises permettent d’indiquer au moteur JSF les parties du document
 HTML qui correspondent aux en-entêtes et au corps. JSF utilise ces
 informations pour éventuellement enrichir la page XHTML finale avec des
 balises supplémentaires.</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">Un exemple de facelet hello.xhtml</span><a class="headerlink" href="#id6" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Un exemple de facelet hello.xhtml</span><a class="headerlink" href="#id5" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -608,8 +626,8 @@ effet, la servlet JSF est configurée pour traiter les requêtes de type
 Il délègue le traitement à la servlet JSF qui interprète la facelet.</p>
 <p>On retrouve beaucoup de similitudes entre facelets et JSP. Par exemple,
 voici une facelet affichant les paramètres de la requête HTTP :</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">Exemple : Une facelet affichant les paramètres</span><a class="headerlink" href="#id7" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Exemple : Une facelet affichant les paramètres</span><a class="headerlink" href="#id6" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -642,7 +660,7 @@ l’expression language (EL) que pour les JSP. Comme une JSP, une facelet
 peut accéder aux attributs des différentes portées (page, request,
 session, application). Cependant pour créer ces attributs, nous n’allons
 plus utiliser l’API servlet comme vu précédemment, nous allons utiliser
-le service <strong>CDI</strong>.</p>
+la gestion des beans intégrée à JSF.</p>
 </div>
 <div class="section" id="activer-le-support-de-jsf-dans-eclipse">
 <h2>Activer le support de JSF dans Eclipse<a class="headerlink" href="#activer-le-support-de-jsf-dans-eclipse" title="Lien permanent vers ce titre">¶</a></h2>
@@ -659,26 +677,20 @@ dans la liste des Facets, cochez « Java Server Faces »,</p></li>
 </ul>
 <p><a class="reference internal" href="../_images/eclipse_configure_jsf.png"><img alt="Configuration de JSF dans Eclipse" src="../_images/eclipse_configure_jsf.png" style="width: 90.0%;" /></a></p>
 </div>
-<div class="section" id="une-introduction-a-cdi">
-<h2>Une introduction à CDI<a class="headerlink" href="#une-introduction-a-cdi" title="Lien permanent vers ce titre">¶</a></h2>
-<p><strong>Contexts and Dependency Injection</strong> (CDI) est un service Java EE
-permettant de déclarer des objets Java qui seront automatiquement créés
-par le serveur et positionnés comme attributs dans la portée désirée.
-Ensuite ces objets sont accessibles depuis une JSP ou une facelets ou
-encore peuvent être injectés dans un composant Java EE ou un autre objet
-géré par CDI.</p>
-</div>
-<div class="section" id="declarer-un-objet-avec-cdi">
-<h2>Déclarer un objet avec CDI<a class="headerlink" href="#declarer-un-objet-avec-cdi" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Nous verrons dans l’exemple ci-dessous une déclaration par annotations :</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">Une déclaration de portée requête</span><a class="headerlink" href="#id8" title="Lien permanent vers ce code">¶</a></div>
+<div class="section" id="managed-beans">
+<h2>Managed beans<a class="headerlink" href="#managed-beans" title="Lien permanent vers ce titre">¶</a></h2>
+<p>JSF est capable de gérer des beans Java. Ainsi, une facelet peut référencer
+un attribut qui sera automatiquement créé par JSF à la demande. Pour cela,
+il faut annoter la classe Java qui doit servir d’attribut avec l’annotation
+<code class="docutils literal notranslate"><span class="pre">&#64;ManagedBean</span></code> :</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Une déclaration de portée requête</span><a class="headerlink" href="#id7" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">com.cgi.udev</span><span class="o">;</span>
 
-<span class="kn">import</span> <span class="nn">javax.enterprise.context.RequestScoped</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.inject.Named</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.faces.bean.ManagedBean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.faces.bean.RequestScoped</span><span class="o">;</span>
 
-<span class="nd">@Named</span>
+<span class="nd">@ManagedBean</span>
 <span class="nd">@RequestScoped</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonneControleur</span> <span class="o">{</span>
 
@@ -690,15 +702,15 @@ géré par CDI.</p>
 </pre></div>
 </div>
 </div>
-<p>L’annotation <code class="docutils literal notranslate"><span class="pre">&#64;Named</span></code> suffit à indiquer que cette classe peut être
-gérée par CDI. L’annotation <code class="docutils literal notranslate"><span class="pre">&#64;RequestScoped</span></code> indique que l’instance de
+<p>L’annotation <code class="docutils literal notranslate"><span class="pre">&#64;ManagedNamed</span></code> suffit à indiquer que cette classe peut être
+gérée par JSF. L’annotation <code class="docutils literal notranslate"><span class="pre">&#64;RequestScoped</span></code> indique que l’instance de
 l’objet sera un attribut de portée requête. Sur le même principe, il
 existe les annotations <code class="docutils literal notranslate"><span class="pre">&#64;SessionScoped</span></code> et <code class="docutils literal notranslate"><span class="pre">&#64;ApplicationScoped</span></code>.</p>
 <p>Par défaut, le nom de l’instance sera le même que le nom de la classe
 commençant par une minuscule. Ainsi, une fois cette classe ajoutée dans
 le projet, il est possible de l’utiliser dans une facelet :</p>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">Utilisation dans une facelet d’un bean géré par CDI</span><a class="headerlink" href="#id9" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Utilisation dans une facelet d’un bean géré par CDI</span><a class="headerlink" href="#id8" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -719,8 +731,8 @@ le projet, il est possible de l’utiliser dans une facelet :</p>
 automatiquement créé avec dans la portée spécifiée par annotation (dans la
 portée requête pour l’exemple précédent).</p>
 <p>Il est également possible de spécifier soi-même le nom du bean dans
-l’annotation <code class="docutils literal notranslate"><span class="pre">&#64;Named</span></code> :</p>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nd">@Named</span><span class="o">(</span><span class="s">&quot;monControleurDePersonne&quot;</span><span class="o">)</span>
+l’annotation <code class="docutils literal notranslate"><span class="pre">&#64;ManagedBean</span></code> :</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="nd">@ManagedBean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;monControleurDePersonne&quot;</span><span class="o">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -738,16 +750,17 @@ dans les implications de la passivation/activation, il suffit de savoir
 que les classes annotées avec <code class="docutils literal notranslate"><span class="pre">&#64;SessionScoped</span></code> doivent implémenter
 l’interface marqueur
 <a class="reference external" href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html">java.io.Serializable</a>.</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">Une déclaration de portée session</span><a class="headerlink" href="#id10" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Une déclaration de portée session</span><a class="headerlink" href="#id9" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">com.cgi.udev</span><span class="o">;</span>
 
-<span class="kn">import</span> <span class="nn">javax.enterprise.context.SessionScoped</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.inject.Named</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.faces.bean.ManagedBean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.faces.bean.SessionScoped</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
 
-<span class="nd">@Named</span>
+<span class="nd">@ManagedBean</span>
 <span class="nd">@SessionScoped</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonneControleur</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">Serializable</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonneControleur</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
 
   <span class="kd">public</span> <span class="n">Personne</span> <span class="nf">getPersonne</span><span class="o">()</span> <span class="o">{</span>
     <span class="c1">// ...</span>
@@ -759,38 +772,16 @@ l’interface marqueur
 </div>
 </div>
 </div>
-<div class="section" id="le-fichier-de-deploiement-beans-xml">
-<h2>Le fichier de déploiement beans.xml<a class="headerlink" href="#le-fichier-de-deploiement-beans-xml" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Comme la plupart des services Java EE, CDI dispose d’un fichier de
-déploiement appelé <code class="file docutils literal notranslate"><span class="pre">beans.xml</span></code>. Ce fichier sert à déclarer des
-fonctionnalités avancées pour CDI mais il doit également être présent
-dans l’arborescence de l’application pour indiquer au serveur d’applications d’activer le
-service CDI pour cette application. Pour une application Web, le fichier
-<code class="file docutils literal notranslate"><span class="pre">beans.xml</span></code> doit se trouver dans le répertoire <code class="file docutils literal notranslate"><span class="pre">WEB-INF</span></code>. Sa structure
-minimale est :</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">Contenu minimal du fichier de déploiement beans.xml</span><a class="headerlink" href="#id11" title="Lien permanent vers ce code">¶</a></div>
-<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="nt">&lt;beans</span>
-  <span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>
-  <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-  <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee</span>
-<span class="s">                      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd&quot;</span><span class="nt">&gt;</span>
-<span class="nt">&lt;/beans&gt;</span>
-</pre></div>
-</div>
-</div>
-</div>
 <div class="section" id="le-modele">
 <h2>Le modèle<a class="headerlink" href="#le-modele" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Dans une application JSF, n’importe quelle instance d’objet Java peut
-jouer le rôle du modèle. Le modèle peut être un objet géré par CDI ou
-rendu disponible par un objet géré par CDI (ce dernier jouant alors le
+jouer le rôle du modèle. Le modèle peut être un objet géré par JSF ou
+rendu disponible par un objet géré par JSF (ce dernier jouant alors le
 rôle de contrôleur). Par exemple, une instance de la classe <code class="docutils literal notranslate"><span class="pre">Personne</span></code>
 peut être utilisée comme modèle dans un formulaire d’une facelet en y
-accédant <em>via</em> le bean CDI personneControleur vu précédemment :</p>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">Utilisation d’un bean CDI dans un formulaire</span><a class="headerlink" href="#id12" title="Lien permanent vers ce code">¶</a></div>
+accédant <em>via</em> le bean géré par JSF personneControleur vu précédemment :</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Utilisation d’un bean CDI dans un formulaire</span><a class="headerlink" href="#id10" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -829,20 +820,20 @@ notation <strong>#{ }</strong>.</p>
 <h2>Le contrôleur<a class="headerlink" href="#le-controleur" title="Lien permanent vers ce titre">¶</a></h2>
 <p>JSF est basé sur l’API servlet mais il permet aux développeurs
 d’application Web de s’en affranchir. Ainsi, avec JSF, un contrôleur est
-simplement une classe Java gérée par CDI qui expose des méthodes qui
+simplement une classe Java gérée par JSF qui expose des méthodes qui
 seront appelées par JSF lors de la réception des requêtes du client.
 Dans la terminologie JSF, on parle de <strong>backing beans</strong> pour désigner
-les objets Java avec lesquels la facelet iteragit.</p>
+les objets Java avec lesquels la facelet interagit.</p>
 <p>La génération d’action vers le contrôleur se fait lorsque le client
 envoie des données vers le serveur. En HTML, cela se fait par la
 soumission de formulaire. Avec JSF, la soumission de formulaire peut se
 faire avec la balise <code class="docutils literal notranslate"><span class="pre">h:commandLink</span></code> ou la balise <code class="docutils literal notranslate"><span class="pre">h:commandButton</span></code>.
 Ces deux balise JSF disposent de l’attribut <code class="docutils literal notranslate"><span class="pre">action</span></code> qui permet
 d’écrire une EL définissant l’appel à une fonction d’un backing bean
-(une instance gérée par CDI). Il est possible de préciser dans l’EL les
+(une instance gérée par JSF). Il est possible de préciser dans l’EL les
 paramètres qui seront passés à la méthode côté serveur.</p>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">Définition d’une action sur un h:commandButton</span><a class="headerlink" href="#id13" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Définition d’une action sur un h:commandButton</span><a class="headerlink" href="#id11" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -873,14 +864,14 @@ est :</p>
 <div class="highlight-jsp notranslate"><div class="highlight"><pre><span></span>#{personneControleur.chercher()}
 </pre></div>
 </div>
-<p>Cela signifie que JSF va chercher un bean CDI portant le nom
+<p>Cela signifie que JSF va chercher un bean portant le nom
 « personneControleur » et il va invoquer la méthode <code class="docutils literal notranslate"><span class="pre">chercher</span></code>. Au
 préalable, les attributs <code class="docutils literal notranslate"><span class="pre">nom</span></code> et <code class="docutils literal notranslate"><span class="pre">age</span></code> de la propriété
 <code class="docutils literal notranslate"><span class="pre">personneControleur.personne</span></code> auront été mis à jour avec les valeurs
 envoyées dans la requête.</p>
 <p>Ainsi un contrôleur valide pourrait être :</p>
-<div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">Un exemple de contrôleur</span><a class="headerlink" href="#id14" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Un exemple de contrôleur</span><a class="headerlink" href="#id12" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">com.cgi.udev</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">javax.enterprise.context.RequestScoped</span><span class="o">;</span>
@@ -907,13 +898,13 @@ envoyées dans la requête.</p>
 </div>
 <p>L’implémentation ci-dessus rappelle le modèle de conception
 <a class="reference external" href="https://fr.wikipedia.org/wiki/Commande_%28patron_de_conception%29">Commande</a>.
-À l’usage, c’est effectivement vers ce type de conception que souhaite
+À l’usage, c’est effectivement vers ce type d’approche que souhaite
 nous orienter les concepteurs de JSF.</p>
 </div>
 <div class="section" id="la-navigation">
 <h2>La navigation<a class="headerlink" href="#la-navigation" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Une fonctionnalité importante des frameworks Web est la gestion de la
-navigation. Après avoir traité une requête, vers quelle vue, un
+navigation. Après avoir traité une requête, vers quelle vue un
 contrôleur doit-il déléguer le traitement pour construire la
 représentation finale ?</p>
 <p>Dans JSF, les vues sont les fichiers XHTML (les facelets). Les
@@ -925,8 +916,8 @@ vue courante.</p>
 <p>Si nous reprenons notre exemple de contrôleur, nous pouvons indiquer la
 vue résultat en modifiant la méthode <code class="docutils literal notranslate"><span class="pre">chercher</span></code> pour qu’elle retourne
 une chaîne de caractères.</p>
-<div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">Spécification de la vue par un contrôleur</span><a class="headerlink" href="#id15" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Spécification de la vue par un contrôleur</span><a class="headerlink" href="#id13" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">com.cgi.udev</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">javax.enterprise.context.RequestScoped</span><span class="o">;</span>
@@ -960,8 +951,8 @@ une chaîne de caractères.</p>
 l’attribut <code class="docutils literal notranslate"><span class="pre">outcome</span></code>. Cet attribut donne l’identifiant de la facelet
 cible. Bien sûr, la valeur de l’attribut <code class="docutils literal notranslate"><span class="pre">outcome</span></code> peut être le
 résultat d’une EL.</p>
-<div class="literal-block-wrapper docutils container" id="id16">
-<div class="code-block-caption"><span class="caption-text">Exemple de navigation simple avec h:link</span><a class="headerlink" href="#id16" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Exemple de navigation simple avec h:link</span><a class="headerlink" href="#id14" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -998,8 +989,8 @@ de JSF fournit, entre autres, les balises <code class="docutils literal notransl
 formulaire, elles permettent d’ajouter des règles de validité pour les
 données de formulaire. JSF validera automatiquement les données soumises
 par l’utilisateur avant de transférer le traitement au contrôleur.</p>
-<div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">Ajout des balises de validation</span><a class="headerlink" href="#id17" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Ajout des balises de validation</span><a class="headerlink" href="#id15" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -1071,8 +1062,8 @@ les facelets.</p>
 <p>L’exemple ci-dessous montre un exemple de validateur permettant de
 s’assurer qu’une case à cocher (checkbox) a bien été cochée par
 l’utilisateur.</p>
-<div class="literal-block-wrapper docutils container" id="id18">
-<div class="code-block-caption"><span class="caption-text">Exemple de facelet utilisant un validateur booleanValidator fourni par l’application</span><a class="headerlink" href="#id18" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">Exemple de facelet utilisant un validateur booleanValidator fourni par l’application</span><a class="headerlink" href="#id16" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -1132,58 +1123,6 @@ l’utilisateur.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="la-validation-avec-bean-validation">
-<h2>La validation avec Bean Validation<a class="headerlink" href="#la-validation-avec-bean-validation" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Le serveur d’application fournit un autre service nommé
-<a class="reference external" href="https://beanvalidation.org/">Bean Validation</a> (JSR303). Bean Validation
-permet d’exprimer les contraintes de validité d’un objet avec des
-annotations. JSF est capable d’interagir avec Bean Validation pour la
-validation de formulaire. Ainsi, plutôt que de déclarer la validation
-dans une facelet comme dans la section précédente, il est possible
-d’ajouter des annotations directement sur le bean <code class="docutils literal notranslate"><span class="pre">Personne</span></code> :</p>
-<div class="literal-block-wrapper docutils container" id="id19">
-<div class="code-block-caption"><span class="caption-text">Utilisation de Bean Validation</span><a class="headerlink" href="#id19" title="Lien permanent vers ce code">¶</a></div>
-<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">com.cgi.udev</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Max</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Min</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Size</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Personne</span> <span class="o">{</span>
-
-  <span class="nd">@Size</span><span class="o">(</span><span class="n">min</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Le nom est obligatoire !&quot;</span><span class="o">)</span>
-  <span class="kd">private</span> <span class="n">String</span> <span class="n">nom</span><span class="o">;</span>
-
-  <span class="nd">@Min</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="o">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;L&#39;âge doit être un nombre positif !&quot;</span><span class="o">)</span>
-  <span class="nd">@Max</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="mi">99</span><span class="o">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;L&#39;âge ne peut pas dépasser 99 ans !&quot;</span><span class="o">)</span>
-  <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getNom</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">nom</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNom</span><span class="o">(</span><span class="n">String</span> <span class="n">nom</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">nom</span> <span class="o">=</span> <span class="n">nom</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-</div>
-</div>
-<p>La documentation des annotations de Bean Validation est disponible dans
-la documentation de l’API Java EE :
-<a class="reference external" href="https://javaee.github.io/javaee-spec/javadocs/javax/validation/constraints/package-summary.html">https://javaee.github.io/javaee-spec/javadocs/javax/validation/constraints/package-summary.html</a></p>
-<p>Bean Validation est une bonne alternative aux balises JSF de validation
-si un bean doit être réutilisé comme modèle dans des facelets
-différentes.</p>
-</div>
 <div class="section" id="les-requetes-ajax">
 <h2>Les requêtes Ajax<a class="headerlink" href="#les-requetes-ajax" title="Lien permanent vers ce titre">¶</a></h2>
 <div class="admonition note">
@@ -1200,8 +1139,8 @@ code JavaScript. JSF injecte lui-même le code JavaScript nécessaire au
 moment du rendu de la facelet.</p>
 <p>Pour activer Ajax, il suffit, par exemple, de spécifier la balise
 <code class="docutils literal notranslate"><span class="pre">f:ajax</span></code> comme balise fille d’un <code class="docutils literal notranslate"><span class="pre">h:commandButton</span></code> :</p>
-<div class="literal-block-wrapper docutils container" id="id20">
-<div class="code-block-caption"><span class="caption-text">Un exemple d’ajout du support Ajax</span><a class="headerlink" href="#id20" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">Un exemple d’ajout du support Ajax</span><a class="headerlink" href="#id17" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;h:commandButton</span> <span class="na">value=</span><span class="s">&quot;un bouton&quot;</span> <span class="na">action=</span><span class="s">&quot;#{monControleur.traiter()}&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;f:ajax</span> <span class="na">execute=</span><span class="s">&quot;@form&quot;</span> <span class="na">render=</span><span class="s">&quot;resultat&quot;</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/h:commandButton&gt;</span>
@@ -1218,7 +1157,7 @@ requête Ajax. Il est possible de lister les id des éléments d’un
 formulaire séparés par un espace. On peut aussi utiliser un des
 mots-clés suivants : <code class="docutils literal notranslate"><span class="pre">&#64;form</span></code> (tous les éléments du formulaire courant),
 <code class="docutils literal notranslate"><span class="pre">&#64;this</span></code> (uniquement le composant qui contient la balise <code class="docutils literal notranslate"><span class="pre">f:ajax</span></code>),
-<code class="docutils literal notranslate"><span class="pre">&#64;all</span></code> (tous les composants graphiques JSF de la page), &#64;none (aucune
+<code class="docutils literal notranslate"><span class="pre">&#64;all</span></code> (tous les composants graphiques JSF de la page), <code class="docutils literal notranslate"><span class="pre">&#64;none</span></code> (aucune
 composant n’est associé à la requête Ajax).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">render</span></code> : spécifie l’ID ou la liste des ID des composants
 graphiques JSF dans la facelet qui doivent être mis à jour lors de la
@@ -1235,8 +1174,8 @@ jour une partie de la page.</p>
 interprétera le résultat comme un ID de facelet et redirigera le
 navigateur vers une nouvelle page.</p>
 <p>Un exemple simple mais complet serait :</p>
-<div class="literal-block-wrapper docutils container" id="id21">
-<div class="code-block-caption"><span class="caption-text">Une facelet utilisant Ajax</span><a class="headerlink" href="#id21" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">Une facelet utilisant Ajax</span><a class="headerlink" href="#id18" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE html PUBLIC</span>
 <span class="cp">          &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
@@ -1259,8 +1198,8 @@ navigateur vers une nouvelle page.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id22">
-<div class="code-block-caption"><span class="caption-text">Le contrôleur associé</span><a class="headerlink" href="#id22" title="Lien permanent vers ce code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">Le contrôleur associé</span><a class="headerlink" href="#id19" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">com.cgi.udev</span><span class="o">;</span>
 
 <span class="kn">import</span> <span class="nn">javax.enterprise.context.RequestScoped</span><span class="o">;</span>
@@ -1303,6 +1242,15 @@ bibliothèques tierces comme la très impressionnante
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../http/http.html" class="btn btn-neutral float-right" title="Le protocole HTTP" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="securite.html" class="btn btn-neutral float-left" title="Sécurisation d’une application Web" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Précédent</a>
+      
+    </div>
   
 
   <hr/>
