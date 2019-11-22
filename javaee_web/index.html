@@ -205,6 +205,40 @@
 <li class="toctree-l2"><a class="reference internal" href="jsf.html#pour-aller-plus-loin">Pour aller plus loin</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="jdbc.html">Accès aux bases de données : JDBC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#preambule-try-with-resources">Préambule : try-with-resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#le-pilote-de-base-de-donnees">Le pilote de base de données</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#creation-d-une-connexion">Création d’une connexion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#l-url-de-connexion-et-la-classe-des-pilotes">L’URL de connexion et la classe des pilotes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#les-requetes-sql-statement">Les requêtes SQL (Statement)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#le-statement">Le Statement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="jdbc.html#exercice">Exercice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#le-resultset">Le ResultSet</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="jdbc.html#id1">Exercice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#le-preparedstatement">Le PreparedStatement</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="jdbc.html#id2">Exercice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jdbc.html#l-injection-sql">L’injection SQL</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#recuperation-des-cles-generees">Récupération des clés générées</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#le-callablestatement">Le CallableStatement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#la-transaction">La transaction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="jdbc.html#exercices">Exercices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jdbc_webapp.html">JDBC dans une application Web</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jdbc_webapp.html#acces-a-une-datasource">Accès à une DataSource</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc_webapp.html#injection-d-une-datasource">Injection d’une DataSource</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc_webapp.html#declaration-de-la-datasource-dans-le-fichier-web-xml">Déclaration de la DataSource dans le fichier web.xml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc_webapp.html#declaration-d-une-datasource-dans-tomcat">Déclaration d’une DataSource dans Tomcat</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">Le protocole HTTP</span></p>
 <ul>
@@ -388,7 +422,76 @@
 <li class="toctree-l1"><a class="reference internal" href="web_listeners_filters.html">Web listeners et filtres</a></li>
 <li class="toctree-l1"><a class="reference internal" href="securite.html">Sécurisation d’une application Web</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jsf.html">Java Server Faces (JSF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdbc.html">Accès aux bases de données : JDBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jdbc_webapp.html">JDBC dans une application Web</a></li>
 </ul>
+</div>
+<div class="exercice admonition">
+<p class="admonition-title">Mini-projet : Cocktail EE</p>
+<p><strong>Objectif</strong></p>
+<blockquote>
+<div><p>On souhaite créer une application Web Java EE pour gérer les commandes
+de cocktails ainsi que la file d’attente pour la préparation des cocktails.
+Cette application est conçue pour les barmen débutants afin de les aider
+à apprendre leur métier.</p>
+</div></blockquote>
+<p><strong>Installation du projet</strong></p>
+<blockquote>
+<div><p>Pour cette application, vous devez obligatoirement partir du projet
+coktailee que vous téléchargez à cette adresse :</p>
+<blockquote>
+<div><p><code class="xref download docutils literal notranslate"><span class="pre">cocktailee.zip</span></code></p>
+</div></blockquote>
+<p>Ce projet contient les fonctionnalités de base permettant d’afficher
+le formulaire de commande d’un cocktail.</p>
+<p>Vous pouvez démarrer ce projet dans le serveur Tomcat de votre
+environnement de développement et accéder ensuite à l’application à
+partir de l’adresse :</p>
+<blockquote>
+<div><p><a class="reference external" href="http://localhost:8080/cocktailee">http://localhost:8080/cocktailee</a></p>
+</div></blockquote>
+</div></blockquote>
+<p><strong>Fonctionnalités à réaliser</strong></p>
+<blockquote>
+<div><p><em>Finaliser la commande d’un cocktail</em></p>
+<blockquote>
+<div><p>L’utilisateur remplit le formulaire de commande avec le cocktail
+choisi et le numéro de la table du bar. Lorsqu’il clique sur le
+bouton <span class="guilabel">Commander</span>, les données doivent être envoyées
+au serveur et une commande doit être créée. Une page récapitulant
+la commande doit s’afficher avec le cocktail choisi et la date et
+l’heure de création de la commande.</p>
+<p>Tous les champs <strong>doivent être obligatoirement saisis</strong> par
+l’utilisateur (sinon le formulaire doit être à nouveau affiché
+avec des messages précisant les champs manquants).</p>
+</div></blockquote>
+<p><em>Réaliser le processus de préparation des cocktails</em></p>
+<blockquote>
+<div><p>Pour la préparation des cocktails, l’application doit disposer
+d’un nouvel écran qui affiche la liste des commandes sous la forme
+d’un tableau. Le tableau doit indiquer le numéro de la table qui
+a commandé et l’heure de la commande. Ce tableau est trié dans
+l’ordre chronologique (la commande la plus ancienne est en première
+position). Sur cet écran, apparaît également un bouton
+<span class="guilabel">cocktail suivant</span>.</p>
+<p>Quand l’utilisateur clique sur ce bouton, un nouvel écran s’affiche
+avec le détail de la commande : le numéro de la table d’où provient
+la commande ainsi que le nom du cocktail et la liste des ingrédients
+(la composition). Cet écran contient un bouton <span class="guilabel">cocktail prêt</span>.
+Quand l’utilisateur clique sur ce bouton, la commande est supprimée
+de la liste et le tableau des commandes est à nouveau affiché afin
+de permettre de passer à la commande suivante.</p>
+</div></blockquote>
+</div></blockquote>
+<p><strong>Réalisation du projet</strong></p>
+<blockquote>
+<div><p>Vous devez <strong>respecter le modèle MVC</strong> pour réaliser cette application.</p>
+<p>Cette application doit fonctionner sans aucune base de données.</p>
+<p>La liste des commandes est une ressource partagée par l’ensemble
+des utilisateurs. Cela peut entraîner des bugs potentiels à l’utilisation.
+Dans le cadre de cet exercice, il ne vous est pas demandé de traiter
+ces bugs potentiels.</p>
+</div></blockquote>
 </div>
 
 
