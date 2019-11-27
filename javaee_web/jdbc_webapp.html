@@ -593,6 +593,13 @@ de déploiement de votre application :</p>
 <p>Si vous ne voulez pas modifier la configuration du serveur, il est possible
 d’ajouter un fichier <code class="file docutils literal notranslate"><span class="pre">src/main/webapp/META-INF/context.xml</span></code> dans votre
 projet Maven et de déclarer à l’intérieur l’élément <code class="docutils literal notranslate"><span class="pre">&lt;Resource</span> <span class="pre">/&gt;</span></code> :</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>Si vous utilisez le serveur Tomcat dans Eclipse, la balise <code class="docutils literal notranslate"><span class="pre">&lt;Context/&gt;</span></code> est
+automatiquement ajoutée par Eclipse lorsque vous ajoutez votre application
+dans le serveur. Attention, cette balise sera aussi supprimée si vous supprimez
+l’application du serveur.</p>
+</div>
 <div class="literal-block-wrapper docutils container" id="id8">
 <div class="code-block-caption"><span class="caption-text">Exemple de fichier context.xml dans l’application</span><a class="headerlink" href="#id8" title="Lien permanent vers ce code">¶</a></div>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;Context&gt;</span>
